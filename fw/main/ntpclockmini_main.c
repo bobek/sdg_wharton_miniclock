@@ -7,8 +7,6 @@
 //  Company:          SDG Electronics
 //  Creation Date:    1st April 2020
 //
-//  Compiler:         Created in Eclipse 4.15.0 using esp-2019r2-8.2.0
-//
 //  Notes:
 //
 //----------------------------------------------------------------------------------

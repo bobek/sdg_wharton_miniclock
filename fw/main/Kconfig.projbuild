@@ -17,4 +17,10 @@ menu "Small Clock Configuration"
         default 5
         help
             Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
+
+    config SNTP_SERVER_NAME
+        string "NTP Server"
+        default "pool.ntp.org"
+        help
+            NTP server to use for time synchronization. Suggest using your private one.
 endmenu

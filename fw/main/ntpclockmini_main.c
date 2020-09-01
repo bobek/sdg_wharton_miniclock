@@ -117,6 +117,7 @@ const char dateEnds[31][3] = {"st", "nd", "rd", "th", "th", "th", "th", "th", "t
 #define WIFI_SSID      CONFIG_ESP_WIFI_SSID
 #define WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
 #define WIFI_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
+#define SNTP_SERVER_NAME  CONFIG_SNTP_SERVER_NAME
 
 static int s_wifi_retry_num = 0;
 
@@ -340,9 +341,9 @@ void obtain_time(void)
 
 void initialise_sntp(void)
 {
-    ESP_LOGI(TAG, "Initializing SNTP");
+    ESP_LOGI(TAG, "Initializing SNTP (%s)", SNTP_SERVER_NAME);
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
-    sntp_setservername(0, "10.0.0.250");     // Use "pool.ntp.org" if no local NTP server 
+    sntp_setservername(0, SNTP_SERVER_NAME);
     sntp_set_time_sync_notification_cb(time_sync_notification_cb);
     sntp_set_sync_mode(SNTP_SYNC_MODE_SMOOTH);
     sntp_init();

@@ -31,11 +31,7 @@
 #include "driver/gpio.h"
 #include "driver/ledc.h"
 #include "brightnessControl.h"
-#include "weatherIcons.h"
 #include <cJSON.h>
-#include "app_wifi.h"
-#include "app_http.h"
-#include "app_rest.h"
 
 static const char *TAG = "Mini Wharton Clock";
 
@@ -148,13 +144,6 @@ uint32_t twentyfourbits = 0;
 uint32_t eightbits = 0;
 uint32_t eightzeroes = 0;
 spi_transaction_t t;
-//---------- Weather Information
-double temperature = 0;
-int    humidity = 0;
-char   weatherinfo[32];
-char   weatherShort[32];
-int	   weathercode = 0;
-int    daytime = 0;
 
 uint8_t g_last = 0;
 
@@ -165,8 +154,6 @@ uint16_t task_core = 0;
 // Function Prototypes
 //-----------------------------------------------------------------------------
 void create_timer_task_core1(void *param);
-static void weather_task(void *pvParameters);
-static void matrix_change_task(void *pvParameters);
 void obtain_time(void);
 void initialise_sntp(void);
 void initialise_wifi(void);
@@ -267,9 +254,6 @@ void create_timer_task_core1(void *param)
 //-------------------------------------------------------------------------
 void app_main()
 {
-// Any local Variables First...
-	char dataString[64];
-
     ++boot_count;
     ESP_LOGI(TAG, "app_main() is starting...");
     ESP_LOGI(TAG, "Boot count: %d", boot_count);
@@ -356,7 +340,7 @@ void initialise_wifi(void)
         ret = nvs_flash_init();
     }
 
-    app_wifi_initialise();
+    //BBK: app_wifi_initialise();
 }
 
 //-------------------------------------------------------------------------
@@ -422,7 +406,7 @@ void app_init(void)
  	// Configure WiFi and SNTP
  	//----------------------------------------------------------
     initialise_wifi();
-    app_wifi_wait_connected();
+    //BBK: app_wifi_wait_connected();
     initialise_sntp();
 }
 
@@ -484,15 +468,12 @@ void timer_isr(void* arg)
 
 		gpio_set_level(LATCH_CATHODES, 0);
 		gpio_set_level(LATCH_ANODES, 0);
-		gpio_set_level(MATRIX_LATCH, 0);
 		gpio_set_level(MRESET_INV, 0);
 		gpio_set_level(LATCH_CATHODES, 1);
 		gpio_set_level(LATCH_ANODES, 1);
-		gpio_set_level(MATRIX_LATCH, 1);
 		gpio_set_level(MRESET_INV, 1);
 		gpio_set_level(LATCH_CATHODES, 0);
 		gpio_set_level(LATCH_ANODES, 0);
-		gpio_set_level(MATRIX_LATCH, 0);
 
 
 			if(multiplex_state < 8)

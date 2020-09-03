@@ -16,11 +16,17 @@ menu "Small Clock Configuration"
         int "Maximum retry"
         default 5
         help
-            Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
+            Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really unreachable.
 
     config SNTP_SERVER_NAME
         string "NTP Server"
         default "pool.ntp.org"
         help
             NTP server to use for time synchronization. Suggest using your private one.
+
+    config LOCAL_TZ_DATA
+        string "tzdata timezone definition string"
+        default "GMT0BST,M3.5.0/1,M10.5.0"
+        help
+            tzdata configuration of your timezone, for example Europe/Prague is CET-1CEST,M3.5.0,M10.5.0/3
 endmenu

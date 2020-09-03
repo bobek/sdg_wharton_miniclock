@@ -112,10 +112,11 @@ const char dateEnds[31][3] = {"st", "nd", "rd", "th", "th", "th", "th", "th", "t
 
 
 // Wifi settings will be taken from "menucofing"
-#define WIFI_SSID      CONFIG_ESP_WIFI_SSID
-#define WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
+#define WIFI_SSID           CONFIG_ESP_WIFI_SSID
+#define WIFI_PASS           CONFIG_ESP_WIFI_PASSWORD
 #define WIFI_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
-#define SNTP_SERVER_NAME  CONFIG_SNTP_SERVER_NAME
+#define SNTP_SERVER_NAME    CONFIG_SNTP_SERVER_NAME
+#define LOCAL_TZ_DATA       CONFIG_LOCAL_TZ_DATA
 
 static int s_wifi_retry_num = 0;
 
@@ -293,13 +294,14 @@ void app_main()
 
     char strftime_buf[64];
 
-    ESP_LOGI(TAG, "Setting Time Zone");
+    ESP_LOGI(TAG, "Setting Time Zone to %s", LOCAL_TZ_DATA);
 
     // Set timezone to GMT and print local time
-    setenv("TZ", "GMT+0BST-1,M3.5.0/01:00:00,M10.5.0/02:00:00", 1);
+    setenv("TZ", LOCAL_TZ_DATA, 1);
     tzset();
     localtime_r(&now, &timeinfo);
     strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+    ESP_LOGI(TAG, "The current local date/time: %s", strftime_buf);
 
     ESP_LOGI(TAG, "Creating Timer Task for Multiplexing");
     xTaskCreatePinnedToCore(create_timer_task_core1, "TimerTask", 8192, NULL, 2, NULL, 1);
